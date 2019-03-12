@@ -1,3 +1,6 @@
+// 反思
+// readline读取node命令行输入
+// 通过flag递增的方式逐行读取
 const readline = require('readline')
 const rl = readline.createInterface({
     input: process.stdin,
