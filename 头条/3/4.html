@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .dialog {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            display: flex;
+            flex-direction: column;
+            width: 668px;
+            height: 608px;
+            margin: -304px 0 0 -334px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            height: 50px;
+            border-bottom: 1px solid #ccc;
+            padding: 0 20px;
+        }
+        .content {
+            flex: 1;
+        }
+        .footer {
+            display: flex;
+            justify-content: center;
+            height: 100px;
+        }
+        .title {
+            color: red;
+        }
+        .close {
+            margin-left: auto;
+        }
+        .close::before {
+            content: '\2716'
+        }
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .wrap {
+            display: flex;
+            flex-wrap: wrap;
+            list-style: none;
+        }
+        .item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        .add {
+            background: url('https://p1.pstatp.com/large/3ecd0004b6bdeff4c48d');
+            background-size: 100% 100%;
+        }
+        .file {
+            opacity: 0;
+        }
+        .add, .file, .pre {
+            width: 110px;
+            height: 110px;
+            border: 1px solid #ccc;
+        }
+        .upload, .cancel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 40px;
+            border-radius: 10px;
+        }
+        .upload {
+            background: red;
+            color: #fff;
+        }
+        .cancel {
+            margin-left: 10px;
+            background: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="dialog">
+        <header class="header">
+            <span class="title">上传图片</span>
+            <div class="close"></div>
+        </header>
+        <div class="content">
+            <div class="wrap">
+                
+            </div>
+            <div class="add item">
+                <input class="file" type="file" name="" accept="image/png,image/jpg,image/jpeg">
+            </div>
+        </div>
+        <footer class="footer">
+            <div class="upload">上传</div>
+            <div class="cancel">取消</div>
+        </footer>
+    </div>
+    <script>
+        init()
+        function init() {
+            var input = document.querySelector('.file')
+            var wrap = document.querySelector('.wrap')
+            var dataURL = ''
+            var file = null
+            input.addEventListener('change', function(value) {
+                var reader = new FileReader()
+                reader.onload = function() {
+                    console.log('haaaj')
+                    dataURL = reader.result
+                    var newImg = document.createElement('img')
+                    newImg.setAttribute('class', 'pre')
+                    newImg.src = dataURL
+                    wrap.appendChild(newImg)
+                }
+                reader.readAsDataURL(input.files[0])
+            })
+            initUpload(dataURL)
+        }
+        function initUpload(dataURL) {
+            var upload = document.querySelector('.upload')
+            upload.addEventListener('click', function(e) {
+                ajax(dataURL)
+            })
+        }
+        function ajax(dataURL) {
+            var xmlHttp = new XMLHttpRequest()
+            xmlHttp.onreadystatechange = function() {
+                if(this.readyState == 4 || this.status == 200) {
+                    console.log(this)
+                } 
+            }
+            xmlHttp.open('post', 'https://mp.toutiao.com/profile_v2/', true)
+            xmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xmlHttp.send(dataURL)
+        }
+    </script>
+</body>
+</html>
